@@ -56,7 +56,7 @@ fs.createReadStream('statelatlong.csv')
   })
 
 //(Drop existing Collection and Run the bellow code)Get all COVID data per state
-usCovidDataPerState = 'https://covidtracking.com/api/v1/states/daily.json'
+var usCovidDataPerState = 'https://covidtracking.com/api/v1/states/daily.json'
 
 fetch(usCovidDataPerState)
   .then((res) => res.json())
