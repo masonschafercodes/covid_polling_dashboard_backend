@@ -32,8 +32,8 @@ const dropCollection = (url, db_name, collection_name) => {
 }
 
 //(If Collection exists you need to drop the collection first, then run this code after) This will create a new geometry_data collection
-// dropCollection(url, 'covid_data_db', 'state_data')
-// dropCollection(url, 'covid_data_db', 'geo_data')
+dropCollection(url, 'covid_data_db', 'state_data')
+dropCollection(url, 'covid_data_db', 'geo_data')
 createCollection(url, 'geo_data', 'covid_data_db')
 createCollection(url, 'state_data', 'covid_data_db')
 
