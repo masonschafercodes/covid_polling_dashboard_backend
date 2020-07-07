@@ -32,10 +32,10 @@ const dropCollection = (url, db_name, collection_name) => {
 }
 
 //(If Collection exists you need to drop the collection first, then run this code after) This will create a new geometry_data collection
-dropCollection(url, 'covid_data_db', 'state_data')
-dropCollection(url, 'covid_data_db', 'geo_data')
-createCollection(url, 'geo_data', 'covid_data_db')
-createCollection(url, 'state_data', 'covid_data_db')
+// dropCollection(url, 'covid_data_db', 'state_data')
+// dropCollection(url, 'covid_data_db', 'geometry_data')
+// createCollection(url, 'geometry_data', 'covid_data_db')
+// createCollection(url, 'state_data', 'covid_data_db')
 
 fs.createReadStream('statelatlong.csv')
   .pipe(csv())
@@ -55,38 +55,38 @@ fs.createReadStream('statelatlong.csv')
     console.log('CSV file successfully processed')
   })
 
-//(Drop existing Collection and Run the bellow code)Get all COVID data per state
-var usCovidDataPerState = 'https://covidtracking.com/api/v1/states/daily.json'
+// //(Drop existing Collection and Run the bellow code)Get all COVID data per state
+// var usCovidDataPerState = 'https://covidtracking.com/api/v1/states/daily.json'
 
-fetch(usCovidDataPerState)
-  .then((res) => res.json())
-  .then((data) => {
-    data.forEach((element) => {
-      MongoClient.connect(url, function (err, db) {
-        if (err) throw err
-        var dbo = db.db('covid_data_db')
-        //AS, GU, MP, PR, VI
-        if (
-          element.state == 'AS' ||
-          element.state == 'GU' ||
-          element.state == 'MP' ||
-          element.state == 'PR' ||
-          element.state == 'VI'
-        ) {
-          console.log('skipped')
-        } else {
-          var myobj = {
-            state: element.state,
-            deaths: element.death,
-            confirmed_cases: element.positive,
-            date: element.date,
-          }
-          dbo.collection('state_data').insertOne(myobj, function (err, res) {
-            if (err) throw err
-            console.log('1 document inserted')
-            db.close()
-          })
-        }
-      })
-    })
-  })
+// fetch(usCovidDataPerState)
+//   .then((res) => res.json())
+//   .then((data) => {
+//     data.forEach((element) => {
+//       MongoClient.connect(url, function (err, db) {
+//         if (err) throw err
+//         var dbo = db.db('covid_data_db')
+//         //AS, GU, MP, PR, VI
+//         if (
+//           element.state == 'AS' ||
+//           element.state == 'GU' ||
+//           element.state == 'MP' ||
+//           element.state == 'PR' ||
+//           element.state == 'VI'
+//         ) {
+//           console.log('skipped')
+//         } else {
+//           var myobj = {
+//             state: element.state,
+//             deaths: element.death,
+//             confirmed_cases: element.positive,
+//             date: element.date,
+//           }
+//           dbo.collection('state_data').insertOne(myobj, function (err, res) {
+//             if (err) throw err
+//             console.log('1 document inserted')
+//             db.close()
+//           })
+//         }
+//       })
+//     })
+//   })
