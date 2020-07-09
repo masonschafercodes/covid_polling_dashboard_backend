@@ -32,8 +32,9 @@ const dropCollection = (url, db_name, collection_name) => {
 }
 
 //(If Collection exists you need to drop the collection first, then run this code after) This will create a new geometry_data collection
-dropCollection(url, 'covid_data_db', 'state_data')
-dropCollection(url, 'covid_data_db', 'geometry_data')
+// dropCollection(url, 'covid_data_db', 'state_data')
+// dropCollection(url, 'covid_data_db', 'geometry_data')
+
 createCollection(url, 'geometry_data', 'covid_data_db')
 createCollection(url, 'state_data', 'covid_data_db')
 
@@ -43,12 +44,16 @@ fs.createReadStream('statelatlong.csv')
     MongoClient.connect(url, function (err, db) {
       if (err) throw err
       var dbo = db.db('covid_data_db')
-      var myobj = { state: row.State, lat: row.Latitude, long: row.Longitude }
-      dbo.collection('geometry_data').insertOne(myobj, function (err, res) {
-        if (err) throw err
-        console.log('1 document inserted')
-        db.close()
-      })
+      if (row.State === 'WA') {
+        console.log('skipped')
+      } else {
+        var myobj = { state: row.State, lat: row.Latitude, long: row.Longitude }
+        dbo.collection('geometry_data').insertOne(myobj, function (err, res) {
+          if (err) throw err
+          console.log('1 document inserted')
+          db.close()
+        })
+      }
     })
   })
   .on('end', () => {
