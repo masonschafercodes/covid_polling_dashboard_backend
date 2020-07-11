@@ -79,11 +79,10 @@ app.get('/api/poll_data/:date', (req, res) => {
 })
 
 //poll data by state
-app.get('/api/poll_data&:state', (req, res) => {
+app.get('/api/poll/:state', (req, res) => {
   const poll_data_col = req.app.locals.poll_data
-  let query = { state: req.params.state }
   poll_data_col
-    .find(query)
+    .find({ state: req.params.state })
     .toArray()
     .then((response) => res.status(200).json(response))
     .catch((error) => console.error(error))
