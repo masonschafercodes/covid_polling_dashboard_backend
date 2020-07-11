@@ -53,6 +53,16 @@ app.get('/', (req, res) => {
     )
 })
 
+app.get('/api/state_data/:date', (req, res) => {
+  const state_data_col = req.app.locals.state_data
+  let dateToFind = parseInt(req.params.date)
+  state_data_col
+    .find({ date: dateToFind })
+    .toArray()
+    .then((response) => res.status(200).json(response))
+    .catch((error) => console.error(error))
+})
+
 app.get('/api/state_data', (req, res) => {
   const state_data_col = req.app.locals.state_data
   state_data_col
