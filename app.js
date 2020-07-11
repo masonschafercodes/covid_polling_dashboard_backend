@@ -98,6 +98,15 @@ app.get('/api/state_data', (req, res) => {
     .catch((error) => console.error(error))
 })
 
+app.get('/api/state/:state', (req, res) => {
+  const state_data_col = req.app.locals.state_data
+  state_data_col
+    .find({ state: req.params.state })
+    .toArray()
+    .then((response) => res.status(200).json(response))
+    .catch((error) => console.error(error))
+})
+
 //All poll_data
 app.get('/api/poll_data', (req, res) => {
   const poll_data_col = req.app.locals.poll_data
