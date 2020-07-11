@@ -97,7 +97,7 @@ app.get('/api/updatealldata', (req, res) => {
           element.state == 'PR' ||
           element.state == 'VI'
         ) {
-          console.log('skipped')
+          console.log(`skipped: ${element.state}`)
         } else {
           var myobj = {
             state: element.state,
