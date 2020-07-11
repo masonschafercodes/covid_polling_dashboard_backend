@@ -22,6 +22,10 @@ const mongo_uri = 'mongodb://localhost:27017/'
 const pres_url = 'presidential_polling.csv'
 const usCovidDataPerState = 'https://covidtracking.com/api/v1/states/daily.json'
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
 // create an initial variable
 let dbClient
 // assign the client from MongoClient
@@ -53,6 +57,7 @@ app.get('/', (req, res) => {
     )
 })
 
+//State data by date
 app.get('/api/state_data/:date', (req, res) => {
   const state_data_col = req.app.locals.state_data
   let dateToFind = parseInt(req.params.date)
@@ -63,6 +68,28 @@ app.get('/api/state_data/:date', (req, res) => {
     .catch((error) => console.error(error))
 })
 
+//Get poll data by date
+app.get('/api/poll_data/:date', (req, res) => {
+  const poll_data_col = req.app.locals.poll_data
+  poll_data_col
+    .find({ date: req.params.date })
+    .toArray()
+    .then((response) => res.status(200).json(response))
+    .catch((error) => console.error(error))
+})
+
+//poll data by state
+app.get('/api/poll_data&:state', (req, res) => {
+  const poll_data_col = req.app.locals.poll_data
+  let query = { state: req.params.state }
+  poll_data_col
+    .find(query)
+    .toArray()
+    .then((response) => res.status(200).json(response))
+    .catch((error) => console.error(error))
+})
+
+//All state data
 app.get('/api/state_data', (req, res) => {
   const state_data_col = req.app.locals.state_data
   state_data_col
@@ -72,6 +99,7 @@ app.get('/api/state_data', (req, res) => {
     .catch((error) => console.error(error))
 })
 
+//All poll_data
 app.get('/api/poll_data', (req, res) => {
   const poll_data_col = req.app.locals.poll_data
   poll_data_col
@@ -81,6 +109,7 @@ app.get('/api/poll_data', (req, res) => {
     .catch((error) => console.error(error))
 })
 
+//All geometry
 app.get('/api/state_geometry', (req, res) => {
   const geo_data_col = req.app.locals.geo_data
   geo_data_col
@@ -90,6 +119,7 @@ app.get('/api/state_geometry', (req, res) => {
     .catch((error) => console.error(error))
 })
 
+//Update database
 app.get('/api/updatealldata', (req, res) => {
   const state_data_col = req.app.locals.state_data
   state_data_col.drop(function (err, delOK) {
